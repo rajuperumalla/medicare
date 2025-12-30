@@ -166,14 +166,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!navContainer) return;
 
         // Desktop Nav Injection
-        navContainer.innerHTML = medicalData.categories.map(cat => {
+        navContainer.innerHTML = medicalData.categories.map((cat, index) => {
             const hasMany = cat.diseases.length > 8;
+            // Detect the last two items (Ophthalmology & Weight Loss) to align dropdowns to the right
+            const isLastItems = index >= medicalData.categories.length - 2;
+            const alignmentClass = isLastItems ? 'align-right' : '';
+
             return `
             <div class="nav-item group relative flex-shrink-0">
                 <div class="dropdown-trigger hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap cursor-pointer py-2 px-0.5" data-cat="${cat.id}">
                     ${cat.name} <i class="fa-solid fa-chevron-down text-[8px] group-hover:rotate-180 transition-transform"></i>
                 </div>
-                <div class="dropdown-menu ${hasMany ? 'w-[500px]' : 'w-[280px]'}">
+                <div class="dropdown-menu ${hasMany ? 'w-[500px]' : 'w-[280px]'} ${alignmentClass}">
                     <h4 class="text-[10px] text-primary font-bold uppercase tracking-widest mb-3 px-2 border-b border-gray-50 pb-2 cursor-pointer hover:bg-blue-50 transition-all nav-category-header" data-cat="${cat.id}">${cat.name} Services</h4>
                     <ul class="grid ${hasMany ? 'grid-cols-2' : 'grid-cols-1'} gap-x-4">
                         ${cat.diseases.map(d => `
